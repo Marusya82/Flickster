@@ -38,7 +38,7 @@ The following **additional** features are implemented:
 
 #### Video Walkthrough
 
-![Alt Text](https://github.com/Marusya82/Flickster/blob/master/Flickster_vertical_demo1.gif)
+![Alt Text](https://github.com/Marusya82/Flickster/blob/master/Flickster_portrait_demo1.gif)
 ![Alt Text](https://github.com/Marusya82/Flickster/blob/master/Flickster_horizontal_demo1.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).

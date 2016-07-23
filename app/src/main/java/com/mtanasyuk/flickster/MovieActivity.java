@@ -18,28 +18,33 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 public class MovieActivity extends AppCompatActivity {
 
     ArrayList<Movie> movies;
     MovieArrayAdapter movieAdapter;
-    ListView lvItems;
-    SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.lvMovies) ListView lvItems;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
+        ButterKnife.bind(this);
 
-        // Lookup the swipe container view
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        // Lookup the swipe container view and list view
+        //swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        //lvItems = (ListView) findViewById(R.id.lvMovies);
 
-        // hide the action bar
+        // hide the action bar for now
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.hide();
 
+        // fetch the movies
         fetchMoviesAsync();
 
         // Setup refresh listener which triggers new data loading
@@ -58,7 +63,6 @@ public class MovieActivity extends AppCompatActivity {
 
     public void fetchMoviesAsync() {
 
-        lvItems = (ListView) findViewById(R.id.lvMovies);
         movies = new ArrayList<>();
         movieAdapter = new MovieArrayAdapter(this, movies);
         lvItems.setAdapter(movieAdapter);

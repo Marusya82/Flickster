@@ -15,6 +15,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
@@ -23,10 +25,31 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
     int orientation;
 
     // view lookup cache
-    private static class ViewHolder {
-        TextView tvTitle;
-        TextView tvOverview;
-        ImageView image;
+    static class ViewHolder {
+        @BindView(R.id.tvTitle) TextView tvTitle;
+        @BindView(R.id.tvOverview) TextView tvOverview;
+        @BindView(R.id.ivMovieImage) ImageView image;
+        @BindView(R.id.ivMovieOverlay) ImageView overlay;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    // view lookup cache
+    static class ViewHolderPopular {
+        @BindView(R.id.ivMovieImage) ImageView image;
+        @BindView(R.id.ivMovieOverlay) ImageView overlay;
+
+        public ViewHolderPopular(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    // Return an integer representing the type by fetching the enum type ordinal
+    @Override
+    public int getItemViewType(int position) {
+        return getItem(position).isPopular();
     }
 
     public MovieArrayAdapter(Context context, List<Movie> movies) {
@@ -36,19 +59,20 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // get the data item for position
+        // get data item for position
         Movie movie = getItem(position);
 
-        // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
+
+        // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
+            // Get the data item type for this position
+            int type = getItemViewType(position);
+            // Inflate XML layout based on the type
+//            convertView = getInflatedLayoutForType(type);
             convertView = inflater.inflate(R.layout.item_movie, parent, false);
-            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-            viewHolder.tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
-            viewHolder.image = (ImageView) convertView.findViewById(R.id.ivMovieImage);
-            viewHolder.image.setImageResource(0);
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -59,6 +83,9 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         viewHolder.tvOverview.setText(movie.getOverview());
         viewHolder.image.setImageResource(0);
 
+        int id = convertView.getResources().getIdentifier("play_icon.png", "drawable", convertView.getContext().getPackageName());
+        viewHolder.overlay.setImageResource(id);
+
         // initialize progress bar for images to load
         final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -68,7 +95,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         if (orientation == 2 && !movie.getBackdropPath().equals("https://image.tmdb.org/t/p/w342/")) {
             finalPath = movie.getBackdropPath();
             progressBar.getLayoutParams().height = 96;
-
+            viewHolder.overlay.getLayoutParams().height = 96;
         } else finalPath = movie.getPosterPath();
 
         Picasso.with(getContext()).load(finalPath).transform(new RoundedCornersTransformation(10,10)).into(viewHolder.image, new com.squareup.picasso.Callback() {
@@ -81,7 +108,18 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
             public void onError() {
             }
         });
-        //return the view
+
         return convertView;
+    }
+
+    // Given the item type, responsible for returning the correct inflated XML layout file
+    private View getInflatedLayoutForType(int type) {
+        if (type == 0) {
+            return LayoutInflater.from(getContext()).inflate(R.layout.item_movie, null);
+        } else if (type == 1) {
+            return LayoutInflater.from(getContext()).inflate(R.layout.item_popular_movie, null);
+        } else {
+            return null;
+        }
     }
 }

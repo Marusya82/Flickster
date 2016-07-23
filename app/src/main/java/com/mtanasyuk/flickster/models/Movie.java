@@ -12,12 +12,21 @@ public class Movie {
     String backdropPath;
     String originalTitle;
     String overview;
+    Double rating;
+    Boolean popular;
 
     public Movie(JSONObject jsonObject) throws JSONException {
+//        if (jsonObject.optJSONObject("backdrop_path") != null) {
+//            this.backdropPath = jsonObject.getString("backdrop_path");
+//        } else this.backdropPath = jsonObject.getString("poster_path");
         this.backdropPath = jsonObject.getString("backdrop_path");
         this.posterPath = jsonObject.getString("poster_path");
         this.originalTitle = jsonObject.getString("original_title");
         this.overview = jsonObject.getString("overview");
+        this.rating = jsonObject.getDouble("vote_average");
+        if (jsonObject.getDouble("vote_average") < 5.0) {
+            this.popular = true;
+        } else this.popular = false;
     }
 
     public static ArrayList<Movie> fromJSONArray (JSONArray array) {
@@ -48,5 +57,14 @@ public class Movie {
 
     public String getOverview() {
         return overview;
+    }
+
+    public Double getRating() {
+        return this.rating;
+    }
+
+    public int isPopular() {
+        if (this.rating < 5.0) return 0;
+        else return 1;
     }
 }

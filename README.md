@@ -17,7 +17,7 @@ The following **required** functionality is completed:
 The following **optional** features are implemented:
 
 * [x] User can **pull-to-refresh** popular stream to get the latest movies.
-* [ ] Display a nice default [placeholder graphic](http://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#configuring-picasso) for each image during loading.
+* [x] Display a nice default [placeholder graphic](http://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#configuring-picasso) for each image during loading. Instead added a progress bar for an image that is loading using [Picasso ProgressBar]. Progress bar size is scaling with image size. (https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#showing-progressbar-with-picasso)
 * [x] Improved the user interface through styling and coloring.
 
 The following **bonus** features are implemented:
@@ -29,12 +29,12 @@ The following **bonus** features are implemented:
     * [ ] More popular movies should start a separate activity that plays the video immediately.
     * [ ] Less popular videos rely on the detail page should show ratings and a YouTube preview.
 * [ ] Leverages the [data binding support module](http://guides.codepath.com/android/Applying-Data-Binding-for-Views) to bind data into layout templates.
-* [ ] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
+* [x] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
 * [x] Apply rounded corners for the poster or background images using [Picasso transformations](https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#other-transformations)
 
 The following **additional** features are implemented:
 
-* [x] Added a progress bar for an image that is loading using [Picasso ProgressBar]. Progress bar size is scaling with image size. (https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#showing-progressbar-with-picasso)
+* [ ]
 
 #### Video Walkthrough
 

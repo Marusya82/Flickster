@@ -34,7 +34,7 @@ The following **bonus** features are implemented:
 
 The following **additional** features are implemented:
 
-* [x] Added a progress bar for an image that is loading with Picasso ProgressBar (http://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#showing-progressbar-with-picasso)
+* [x] Added a progress bar for an image that is loading with Picasso ProgressBar (https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#showing-progressbar-with-picasso)
 
 #### Video Walkthrough
 

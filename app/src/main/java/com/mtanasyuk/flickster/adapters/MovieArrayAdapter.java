@@ -21,15 +21,14 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
-    // 1 for portrait, 2 for backdrop
+    // 1 for portrait, 2 for landscape
     int orientation;
 
     // view lookup cache
     static class ViewHolder {
-        @BindView(R.id.tvTitle) TextView tvTitle;
         @BindView(R.id.tvOverview) TextView tvOverview;
+        @BindView(R.id.tvTitle) TextView tvTitle;
         @BindView(R.id.ivMovieImage) ImageView image;
-        @BindView(R.id.ivMovieOverlay) ImageView overlay;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -38,8 +37,8 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
     // view lookup cache
     static class ViewHolderPopular {
-        @BindView(R.id.ivMovieImage) ImageView image;
-        @BindView(R.id.ivMovieOverlay) ImageView overlay;
+        @BindView(R.id.ivPopularMovieImage) ImageView popularImage;
+        @BindView(R.id.ivOverlay) ImageView overlay;
 
         public ViewHolderPopular(View view) {
             ButterKnife.bind(this, view);
@@ -52,6 +51,12 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         return getItem(position).isPopular();
     }
 
+    // Total number of types is 2
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
     public MovieArrayAdapter(Context context, List<Movie> movies) {
         super(context, android.R.layout.simple_list_item_1, movies);
         orientation = context.getResources().getConfiguration().orientation;
@@ -59,67 +64,93 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // get data item for position
-        Movie movie = getItem(position);
+        // Get the data item type for this position
+        int type = getItemViewType(position);
 
-        ViewHolder viewHolder; // view lookup cache stored in tag
+        switch (type) {
+            case 0:
+                ViewHolder viewHolder;
+                View convertView1 = convertView;
+                // Check if an existing view is being reused, otherwise inflate the view
+                if (convertView1 == null) {
+                    // Inflate XML layout based on the type
+                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                    convertView1 = inflater.inflate(R.layout.item_movie, parent, false);
+                    viewHolder = new ViewHolder(convertView1);
+                    convertView1.setTag(viewHolder);
+                } else {
+                    viewHolder = (ViewHolder) convertView1.getTag();
+                }
+                // get data item for position
+                Movie movie = getItem(position);
+                // populate the data into the template view using the data object
+                viewHolder.tvOverview.setText(movie.getOverview());
+                viewHolder.tvTitle.setText(movie.getOriginalTitle());
+                viewHolder.image.setImageResource(0);
 
-        // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            // Get the data item type for this position
-            int type = getItemViewType(position);
-            // Inflate XML layout based on the type
-//            convertView = getInflatedLayoutForType(type);
-            convertView = inflater.inflate(R.layout.item_movie, parent, false);
-            viewHolder = new ViewHolder(convertView);
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+                // initialize progress bar for images to load
+                final ProgressBar progressBar = (ProgressBar) convertView1.findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE);
 
-        // populate the data into the template view using the data object
-        viewHolder.tvTitle.setText(movie.getOriginalTitle());
-        viewHolder.tvOverview.setText(movie.getOverview());
-        viewHolder.image.setImageResource(0);
+                // use backdrop image for the landscape mode, poster for the portrait
+                if (orientation == 2) {
+                    viewHolder.tvTitle.getLayoutParams().width = 400;
+                    viewHolder.tvOverview.getLayoutParams().width = 400;
+                }
 
-        int id = convertView.getResources().getIdentifier("play_icon.png", "drawable", convertView.getContext().getPackageName());
-        viewHolder.overlay.setImageResource(id);
+                Picasso.with(getContext()).load(movie.getPosterPath()).transform(new RoundedCornersTransformation(10, 10)).into(viewHolder.image, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        // Hide progress bar on successful load
+                        progressBar.setVisibility(View.GONE);
+                    }
 
-        // initialize progress bar for images to load
-        final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
+                    @Override
+                    public void onError() {
+                    }
+                });
+                return convertView1;
 
-        // use backdrop image for the landscape mode, poster for the portrait
-        String finalPath;
-        if (orientation == 2 && !movie.getBackdropPath().equals("https://image.tmdb.org/t/p/w342/")) {
-            finalPath = movie.getBackdropPath();
-            progressBar.getLayoutParams().height = 96;
-            viewHolder.overlay.getLayoutParams().height = 96;
-        } else finalPath = movie.getPosterPath();
+            case 1:
+                final ViewHolderPopular viewHolderPopular;
+                View convertView2 = convertView;
+                // Check if an existing view is being reused, otherwise inflate the view
+                if (convertView2 == null) {
+                    // Inflate XML layout based on the type
+                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                    convertView2 = inflater.inflate(R.layout.item_popular_movie, parent, false);
+                    viewHolderPopular = new ViewHolderPopular(convertView2);
+                    convertView2.setTag(viewHolderPopular);
+                } else {
+                    viewHolderPopular = (ViewHolderPopular) convertView2.getTag();
+                }
 
-        Picasso.with(getContext()).load(finalPath).transform(new RoundedCornersTransformation(10,10)).into(viewHolder.image, new com.squareup.picasso.Callback() {
-            @Override
-            public void onSuccess() {
-                // Hide progress bar on successful load
-                progressBar.setVisibility(View.GONE);
-            }
-            @Override
-            public void onError() {
-            }
-        });
+                Movie popularMovie = getItem(position);
+                // populate the data into the template view using the data object
+                viewHolderPopular.popularImage.setImageResource(0);
+                final int id = R.drawable.play_icon2;
 
-        return convertView;
-    }
+                // initialize progress bar for images to load
+                final ProgressBar progressBarPopular = (ProgressBar) convertView2.findViewById(R.id.progressBarPopular);
+                progressBarPopular.setVisibility(View.VISIBLE);
 
-    // Given the item type, responsible for returning the correct inflated XML layout file
-    private View getInflatedLayoutForType(int type) {
-        if (type == 0) {
-            return LayoutInflater.from(getContext()).inflate(R.layout.item_movie, null);
-        } else if (type == 1) {
-            return LayoutInflater.from(getContext()).inflate(R.layout.item_popular_movie, null);
-        } else {
-            return null;
+                Picasso.with(getContext()).load(popularMovie.getBackdropPath()).transform(new RoundedCornersTransformation(10, 10)).into(viewHolderPopular.popularImage, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        // Hide progress bar on successful load
+                        progressBarPopular.setVisibility(View.GONE);
+                        viewHolderPopular.overlay.setVisibility(View.VISIBLE);
+                        viewHolderPopular.overlay.setImageResource(id);
+                    }
+
+                    @Override
+                    public void onError() {
+                    }
+                });
+                return convertView2;
+
+            default:
+                return null;
         }
     }
 }

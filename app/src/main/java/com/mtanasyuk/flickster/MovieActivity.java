@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -59,6 +60,9 @@ public class MovieActivity extends AppCompatActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+        // set up list view listener to watch trailers
+        setupListViewListener();
     }
 
     public void fetchMoviesAsync() {
@@ -94,8 +98,27 @@ public class MovieActivity extends AppCompatActivity {
         });
     }
 
-    public void openVideo(View view) {
-        Intent intent = new Intent(this, DetailsActivity.class);
+    public void playVideo(View view) {
+        Intent intent = new Intent(this, TrailerActivity.class);
         startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    // bring up a clicked task to edit
+    private void setupListViewListener() {
+        lvItems.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapter, View task, int pos, long id) {
+                        Movie movieInit = movies.get(pos);
+                        Intent i = new Intent(MovieActivity.this, TrailerActivity.class);
+                        i.putExtra("id", movieInit.getId());
+                        i.putExtra("rating", movieInit.getRating());
+                        i.putExtra("overview", movieInit.getOverview());
+                        i.putExtra("title", movieInit.getOriginalTitle());
+                        i.putExtra("popularity", movieInit.getPopularity());
+                        startActivityForResult(i, REQUEST_CODE);
+                    }
+                }
+        );
     }
 }

@@ -22,30 +22,26 @@ The following **optional** features are implemented:
 
 The following **bonus** features are implemented:
 
-* [ ] Allow user to view details of the movie including ratings and popularity within a separate activity or dialog fragment.
-* [ ] When viewing a popular movie (i.e. a movie voted for more than 5 stars) the video should show the full backdrop image as the layout.  Uses [Heterogenous ListViews](http://guides.codepath.com/android/Implementing-a-Heterogenous-ListView) or [Heterogenous RecyclerView](http://guides.codepath.com/android/Heterogenous-Layouts-inside-RecyclerView) to show different layouts.
-* [ ] Allow video trailers to be played in full-screen using the YouTubePlayerView.
-    * [ ] Overlay a play icon for videos that can be played.
-    * [ ] More popular movies should start a separate activity that plays the video immediately.
-    * [ ] Less popular videos rely on the detail page should show ratings and a YouTube preview.
+* [x] Allow user to view details of the movie including ratings and popularity within a separate activity or dialog fragment.
+* [x] When viewing a popular movie (i.e. a movie voted for more than 5 stars) the video should show the full backdrop image as the layout.  Uses [Heterogenous ListViews](http://guides.codepath.com/android/Implementing-a-Heterogenous-ListView) or [Heterogenous RecyclerView](http://guides.codepath.com/android/Heterogenous-Layouts-inside-RecyclerView) to show different layouts.
+* [x] Allow video trailers to be played in full-screen using the YouTubePlayerView.
+    * [x] Overlay a play icon for videos that can be played.
+    * [x] More popular movies should start a separate activity that plays the video immediately.
+    * [x] Less popular videos rely on the detail page should show ratings and a YouTube preview.
 * [ ] Leverages the [data binding support module](http://guides.codepath.com/android/Applying-Data-Binding-for-Views) to bind data into layout templates.
 * [x] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
 * [x] Apply rounded corners for the poster or background images using [Picasso transformations](https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#other-transformations)
 
-The following **additional** features are implemented:
-
-* [ ]
-
 #### Video Walkthrough
 
-![Alt Text](https://github.com/Marusya82/Flickster/blob/master/Flickster_portrait_demo1.gif)
-![Alt Text](https://github.com/Marusya82/Flickster/blob/master/Flickster_horizontal_demo1.gif)
+![Alt Text](https://github.com/Marusya82/Flickster/blob/master/Flickster_portrait_demo.gif)
+![Alt Text](https://github.com/Marusya82/Flickster/blob/master/Flickster_landscape_demo.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 #### Notes
 
-Describe any challenges encountered while building the app.
+Describe any challenges encountered while building the app: Layout is the most challenging part, especially horiozontal and vertical centering.
 
 #### Open-source libraries used
 

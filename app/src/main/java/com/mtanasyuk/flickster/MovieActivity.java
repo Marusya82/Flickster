@@ -98,11 +98,6 @@ public class MovieActivity extends AppCompatActivity {
         });
     }
 
-    public void playVideo(View view) {
-        Intent intent = new Intent(this, TrailerActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
-    }
-
     // bring up a clicked task to edit
     private void setupListViewListener() {
         lvItems.setOnItemClickListener(

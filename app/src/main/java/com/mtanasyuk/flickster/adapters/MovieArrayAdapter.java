@@ -96,6 +96,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
                 if (orientation == 2) {
                     viewHolder.tvTitle.getLayoutParams().width = 400;
                     viewHolder.tvOverview.getLayoutParams().width = 400;
+                    viewHolder.image.getLayoutParams().width = 600;
                 }
 
                 Picasso.with(getContext()).load(movie.getPosterPath()).transform(new RoundedCornersTransformation(10, 10)).into(viewHolder.image, new com.squareup.picasso.Callback() {
